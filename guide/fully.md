@@ -1,4 +1,6 @@
 ---
-parent: Status
+layout: default
+title: Fully Documented
+parent: Documentation Guide
 ---
-# Fully-documented
+# Fully Documented

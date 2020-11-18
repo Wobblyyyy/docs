@@ -1,5 +1,6 @@
 ---
+layout: default
 title: Status
-has-children: true
+parent: Documentation Guide
 ---
 # Status
