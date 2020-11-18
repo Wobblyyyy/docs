@@ -8,7 +8,7 @@ nav_order: 1
 "Documentation Status" refers to the amount of which a given project is documented. There's
 three different tiers of documentation, and they are as follows.
 
-{:toc}
+<ol>{:toc}
 
 ## Fully Documented
 This project is documented from head to toe. Every method, every line, every single character
