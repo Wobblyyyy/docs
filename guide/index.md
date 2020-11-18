@@ -1,5 +1,5 @@
 ---
 layout: default
-has-children: true
+has_children: true
 title: Documentation Guide
 ---
