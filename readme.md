@@ -1,3 +1,8 @@
+---
+layout: default
+title: Readme
+nav_order: 1
+---
 !["docs;" logo](logo.png)
 Here's a lovely little web portal, leading to the documentation for all of my various projects.
 This documentation is written in markdown files and converted to look pretty beautiful by using
