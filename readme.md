@@ -10,7 +10,9 @@ This documentation is written in markdown files and converted to look pretty bea
 GitHub Pages in combination with Jekyll. The theme, in case you're wondering, is JustTheDocs
 (dark mode), a Jekyll documentation theme available [here](https://github.com/pmarsceill/just-the-docs).
 
+* TOC
 {:toc}
+<ol>
 
 ## Documentation Statuses
 Click [here](https://wobblyyyy.github.io/docs/guide/status) for more information.
