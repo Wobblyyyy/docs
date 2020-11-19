@@ -10,7 +10,7 @@ nav_order: 1
 three different tiers of documentation, and they are as follows.
 
 ##### TABLE OF CONTENTS
-1. Table of Contents
+1.
 {:toc}
 
 ## Fully Documented

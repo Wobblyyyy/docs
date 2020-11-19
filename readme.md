@@ -11,7 +11,7 @@ GitHub Pages in combination with Jekyll. The theme, in case you're wondering, is
 (dark mode), a Jekyll documentation theme available [here](https://github.com/pmarsceill/just-the-docs).
 
 ##### TABLE OF CONTENTS
-1. Table of Contents
+1. 
 {:toc}
 
 ## Documentation Statuses
