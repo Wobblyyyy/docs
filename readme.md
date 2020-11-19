@@ -10,7 +10,8 @@ This documentation is written in markdown files and converted to look pretty bea
 GitHub Pages in combination with Jekyll. The theme, in case you're wondering, is JustTheDocs
 (dark mode), a Jekyll documentation theme available [here](https://github.com/pmarsceill/just-the-docs).
 
-* Table of Contents
+##### TABLE OF CONTENTS
+1. Table of Contents
 {:toc}
 
 ## Documentation Statuses
