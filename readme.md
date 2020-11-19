@@ -13,6 +13,7 @@ GitHub Pages in combination with Jekyll. The theme, in case you're wondering, is
 <ol>
 * TOC
 {:toc}
+</ol>
 
 ## Documentation Statuses
 Click [here](https://wobblyyyy.github.io/docs/guide/status) for more information.
