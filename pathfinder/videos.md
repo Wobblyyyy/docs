@@ -11,4 +11,6 @@ how to use a Java library. To ease your assumed pain, I've created a couple
 documentary-related videos.
 
 ## Available Videos 
-- [here]()
+- [Pathfinder - Quickstart (FTC Odometry & Pathfinding)](https://google.com)
+- [Pathfinder - Advanced Set-Up (FTC Odometry & Pathfinding)](https://google.com)
+- [Pathfinder - Maps Tutorial (FTC Odometry & Pathfinding)](https://google.com)
