@@ -5,16 +5,17 @@ parent: Pathfinder
 nav_order: 5
 ---
 
-##### TABLE OF CONTENTS
-1. 
-{:toc}
-
 # Pathfinder for FTC
 **If you're not already using ftc2 and are planning on writing code specifically for any
 given FTC season, you absolutely should be.** If you want to learn a bit more about ftc2
 and how to use it, click [here](https://github.com/Wobblyyyy/ftc2).
 
-## Using Pathfinder-ftc
+##### TABLE OF CONTENTS
+1. 
+{:toc}
+
+
+# Using Pathfinder-ftc
 There's another library, titled Pathfinder-ftc, which you can use specifically for the
 First Tech Challenge. Obviously, you can feel free to write your own code to implement
 Pathfinder and figure out how to use it on your own. However, if you're anything like me,
