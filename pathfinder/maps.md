@@ -14,6 +14,10 @@ Now you know. Regardless, maps, in this context, have an even cooler definition.
 > different areas of the field.
 Maps use Euclidian geometry, of course. So how do we make our own?
 
+##### TABLE OF CONTENTS
+1. 
+{:toc}
+
 ## A quick disclaimer
 Unless you absolutely have to, you really shouldn't be making your own map. There's just about a million
 maps for a million different scenarios already included in this library, under the maps package in this

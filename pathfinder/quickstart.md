@@ -11,6 +11,10 @@ confident you already know what you're doing, it's a great idea to go ahead and
 read through the installation before you continue. The installation guide can be
 accessed using the sidebar on the left.
 
+##### TABLE OF CONTENTS
+1. 
+{:toc}
+
 # Writing some code
 Just to make sure we're all on the same page here. All (or at least the very vast majority of (even private)) of the methods,
 classes, and whatever in between, included in this library is documented. Of course, these JavaDocs are available in this

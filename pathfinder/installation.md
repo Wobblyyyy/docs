@@ -8,6 +8,10 @@ nav_order: 1
 # Installation
 Installation hopefully isn't too difficult to complete - regardless, best of luck.
 
+##### TABLE OF CONTENTS
+1. 
+{:toc}
+
 Not much else. Everything else that Pathfinder uses should be bundled inside of the JAR itself. Certain `ftc2` distrubtions 
 may include releases of Pathfinder, but assuming you've downloaded the two separately, these should both be added as Gradle
 dependencies. ftc2 isn't exactly required, hence it's marked optional, but it's hugely useful in doing a bunch of stuff and

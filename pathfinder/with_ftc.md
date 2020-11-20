@@ -5,6 +5,10 @@ parent: Pathfinder
 nav_order: 5
 ---
 
+##### TABLE OF CONTENTS
+1. 
+{:toc}
+
 # Pathfinder for FTC
 **If you're not already using ftc2 and are planning on writing code specifically for any
 given FTC season, you absolutely should be.** If you want to learn a bit more about ftc2
