@@ -12,7 +12,7 @@ anybody who's competent enough to use code understands what a map is. Just in ca
 Now you know. Regardless, maps, in this context, have an even cooler definition.
 > A set of `Zone`s, composed of the even simpler `Shape`s, which indicate the extents and bounds of 
 > different areas of the field.
-Maps use Euclidian geometry, of course. So how do we make our own?
+Maps use Euclidean geometry, of course. So how do we make our own?
 
 ##### TABLE OF CONTENTS
 1. 
