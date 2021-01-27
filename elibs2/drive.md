@@ -6,8 +6,14 @@ nav_order: 2
 ---
 
 # Chassis and Motor Control
-Installation hopefully isn't too difficult to complete - regardless, best of luck.
+Ahh... my favorite. Forward AND inverse kinematics.
 
 ##### TABLE OF CONTENTS
 1. 
 {:toc}
+
+## Controlling a Single Motor 
+
+## Using a Pre-Built Drivetrain
+
+## Creating a Drivetrain

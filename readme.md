@@ -41,6 +41,13 @@ are mildly stupid sometimes, so I do apologize.
 - JavaDoc Link: [Pathfinder](https://wobblyyyy.github.io/JavaDocs/Pathfinder)
 - Documentation Link: [Pathfinder](Pathfinder/index.md)
 
+### elibs2
+- Documentation Status: [Partially Documented](guide/status.md)
+- Description: Expansive library for various abstractions in FIRST'S robotics challenge.
+- GitHub Repository: [elibs2](https://github.com/Wobblyyyy/roxbotix-elib)
+- JavaDoc Link: [elibs2](https://wobblyyyy.github.io/JavaDocs/elibs2)
+- Documentation Link: [elibs2](elibs2/index.md)
+
 ### ftc2
 - Documentation Status: [Partially Documented](guide/status.md)
 - Description: Abstractions and utilities for the First Tech Challenge.
