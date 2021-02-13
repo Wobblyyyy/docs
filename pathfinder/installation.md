@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Pathfinder Installation
+title: Installation
 parent: Pathfinder
 nav_order: 1
 ---

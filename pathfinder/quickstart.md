@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Pathfinder Quickstart
+title: Quickstart
 parent: Pathfinder
 nav_order: 3
 ---
@@ -17,13 +17,13 @@ accessed using the sidebar on the left.
 
 ## Getting familiar with Pathfinder
 Pathfinder is an expansible and extensible library for dynamic path generation
-and playback. Unlike similiar libraries, such as ACME Robotic's RoadRunner,
+and playback. Unlike similar libraries, such as ACME Robotics RoadRunner,
 Pathfinder is designed to be as close to a drag-and-drop solution as possible.
 
 ## Generating your First Path
-You, unfortunately, won't have some magic method that you can just run and your
+You, unfortunately, won't have some magic method that you can just run, and your
 robot will immediately do whatever you ask it to. However, it's almost as easy.
-Almost. There's two ways you can handle some of the pre-requisites to path generation,
+Almost. There are two ways you can handle some pre-requisites to path generation,
 which are as follows.
 - Controllable drivetrain
 - Accurate odometry
@@ -35,7 +35,7 @@ which are as follows.
   - Maximum jerk
   - Maximum speed (feet per second)
 
-All of the stuff you need (or might want) is detailed (very thoroughly) in
+All the stuff you need (or might want) is detailed (very thoroughly) in
 the PathfinderConfig class (`me.wobblyyyy.pathfinder.config.PathfinderConfig`).
 
 ### Pre-Made / Custom Drivetrains

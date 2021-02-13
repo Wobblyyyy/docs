@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Pathfinder Maps
+title: Maps
 parent: Pathfinder
 nav_order: 2
 ---
