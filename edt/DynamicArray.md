@@ -9,6 +9,10 @@ nav_order: 1
 # DynamicArray
 Arrays are cool and all, but they're even cooler when they're dynamic.
 
+##### TABLE OF CONTENTS
+1. 
+{:toc}
+
 ### Performance
 DynamicArray is similiar in function to the ArrayList class provided by java.utils.
 The intention of this class is to improve performance on ArrayList elements by increasing
@@ -21,6 +25,9 @@ an iterator that allows for faster iteration over (a) the entire data set or (b)
 a given range of the data set.
 
 ## Usage 
+Usage documentation for the DynamicArray class is provided through examples. Anything
+not clear from the examples should be explained in the JavaDocs for the class. Anything
+not explained there can hopefully be explained via code - hopefully, that is.
 
 ### Add
 ```java
@@ -141,12 +148,107 @@ ArrayList<Object> asArrayList = array.toArrayList();
 ArrayList<String> swagList = new ArrayList<>().addAll(array.toArray(new String[array.size()]));
 ``` 
 
-##### TABLE OF CONTENTS
-1. 
-{:toc}
+### Trim, Clear, Reset, and free up memory
+```java
+// Create a new array and add 3 values.
+DynamicArray<String> array = new DynamicArray<>() {{
+  add("String 1");
+  add("String 2");
+  add("String 3");
+}};
 
-## Controlling a Single Motor 
+// The real size of the array. By default, unless otherwise specified, this
+// is 10. This means that the array is technically allocated to 10 in length.
+// To you, it looks like the array is only 3 in length. But internally, the
+// array is over-allocated to accomodate for future expansion.
+int realSize = array.realSize(); // 10
+int size = array.size();         // 3
 
-## Using a Pre-Built Drivetrain
+// The trim method!
+// This method is useful when arrays reach very large sizes and are taking up
+// a ton of memory. Using the trim method will help to free up some of this
+// memory. It forces re-allocation, which can be rather expensive.
+array.trim(); // Trim the array. Let's take a look at the real size now.
+realSize = array.realSize(); // Only 3!
+size = array.size();         // 3
 
-## Creating a Drivetrain
+// Clear!
+// This method will set all of the values in the active portion of the array
+// to "null".
+array.clear(); // clear the array
+String test = array.get(0); // null
+
+// Reset the array!
+array.reset(); // reset the entire array to the default size 
+String asString = Arrays.toString(array.toArray()); // []
+```
+### Iteration
+```java
+// Create a new array and add 3 values.
+DynamicArray<String> array = new DynamicArray<>() {{
+  add("String 1");
+  add("String 2");
+  add("String 3");
+}};
+
+// Iterate over the entire array, print out each of the values
+array.itr().forEach(s -> {
+  System.out.println(s);
+});
+// This call will print the following output to the console:
+// >> String 1
+// >> String 2
+// >> String 3
+
+// Iterate over the array, get previous index, current index, next
+// index, previous element, current element, and next element.
+array.itr().forEach(() -> {
+  // TRY! We'll get exceptions otherwise, as we're requesting an
+  // element that's not in the array.
+  // First execution has no previous index or element.
+  try {
+    System.out.println("Previous index: " + array.itr().previousIndex());
+    System.out.println("Previous element: " + array.itr().previous());
+  } catch (ArrayIndexOutOfBoundsException ignored) {
+    
+  }
+
+  System.out.println("Index: " + array.itr().index());
+  System.out.println("Current element: " + array.itr().element());
+
+  // TRY! We'll get exceptions otherwise, as we're requesting an
+  // element that's not in the array.
+  // Last execution has no next index or element.
+  try {
+    System.out.println("Next index: " + array.itr().nextIndex());
+    System.out.println("Next element: " + array.itr().nextElement());
+  } catch (ArrayIndexOutOfBoundsException ignored) {
+    
+  }
+
+  System.out.println("");
+  System.out.println("");
+  System.out.println("");
+});
+// This call will print the following.
+// >> Index: 0
+// >> Current element: String 1
+// >> Next index: 1
+// >> Next element: String 2
+// >> 
+// >> 
+// >> 
+// >> Previous index: 0
+// >> Previous element: String 1
+// >> Index: 1
+// >> Current element: String 2
+// >> Next index: 2
+// >> Next element: String 3
+// >> 
+// >> 
+// >> 
+// >> Previous index: 1
+// >> Previous element: String 2
+// >> Index: 2
+// >> Current element: String 3
+```
