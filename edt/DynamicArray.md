@@ -241,20 +241,20 @@ DynamicArray<String> array = new DynamicArray<>() {
 Object[] asObjectArray = array.toArray();
 ```
 
-#### As a <E> array
+#### As a `<E>` array
 ```java 
 // As an array of String elements
 String[] strings = new String[array.size()];
 strings = array.toArray(strings);
 ```
 
-#### As an ArrayList<Object>
+#### As an `ArrayList<Object>`
 ```java 
 // As an ArrayList of objects
 ArrayList<Object> asArrayList = array.toArrayList();
 ```
 
-#### As an ArrayList<E>
+#### As an `ArrayList<E>`
 ```java
 // As an ArrayList of String elements
 ArrayList<String> swagList = new ArrayList<>().addAll(array.toArray(new String[array.size()]));
