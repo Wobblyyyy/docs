@@ -29,6 +29,73 @@ Usage documentation for the DynamicArray class is provided through examples. Any
 not clear from the examples should be explained in the JavaDocs for the class. Anything
 not explained there can hopefully be explained via code - hopefully, that is.
 
+### Creating a new DynamicArray
+DynamicArray construction can be handled in quite a few different ways.
+
+#### Method 1: With a defined size
+```java
+// 100 is the minimum size, meaning the array won't have to grow so long
+// as it's kept under that size. You should set the minimum size to
+// about the maximum amount of elements you'll have in the array. It's
+// generally better to over-estimate than to under-estimate. 
+DynamicArray<String> array = new DynamicArray<>(100);
+```
+
+#### Method 2: Based off another `Arrayable<E>`
+```java
+StaticArray<String> arrayableItem = new StaticArray<>(3) {{
+  set(0, "String 1");
+  set(1, "String 2");
+  set(2, "String 3");
+}};
+
+DynamicArray<String> array = new DynamicArray<>(arrayableItem);
+```
+
+#### Method 3: Based off an array
+```java
+DynamicArray<String> array = new DynamicArray<>(new String[] {
+  "String 1",
+  "String 2",
+  "String 3"
+});
+```
+
+#### Method 4: Based off an `ArrayList<E>`
+```java
+ArrayList<String> stringArrayList = new ArrayList<>() {{
+  add("String 1");
+  add("String 2");
+  add("String 3");
+}};
+
+DynamicArray<String> array = new DynamicArray<>(
+  stringArrayList
+);
+```
+
+#### Method 5: Based off an array, with a defined size
+```java
+DynamicArray<String> array = new DynamicArray<>(
+  3, // min size
+  new String[] {
+    "String 1",
+    "String 2",
+    "String 3"
+  }
+);
+```
+
+#### Method 6: With class initializer
+```java
+DynamicArray<String> array = new DynamicArray<>() {{
+  add("String 1");
+  add("String 2");
+  add("String 3");
+}}
+```
+
+
 ### Add
 ```java
 // Create a new dynamic array.
@@ -251,4 +318,28 @@ array.itr().forEach(() -> {
 // >> Previous element: String 2
 // >> Index: 2
 // >> Current element: String 3
+```
+
+### To static array, from static array 
+```java
+// Create a dynamic array that will be converted to a static array 
+DynamicArray<String> dynamicArray = new DynamicArray<>(
+  "String 1",
+  "String 2",
+  "String 3",
+  "String 4",
+  "String 5",
+);
+// Convert it to a static array 
+StaticArray<String> staticArray = new StaticArray<>(dynamicArray);
+
+// Convert it back to a dynamic array.
+// Add an element, just to flex.
+dynamicArray = new DynamicArray<>(staticArray);
+dynamicArray.add("String 6");
+
+// Convert it back to a static array.
+staticArray = new StaticArray<>(dynamicArray);
+// At this point, the static array's contents are:
+// ["String 1", "String 2", "String 3", "String 4", "String 5", "String 6"]
 ```
