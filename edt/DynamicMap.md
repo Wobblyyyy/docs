@@ -257,17 +257,139 @@ boolean containsValue = map.containsValue("String 6 Value"); // false
 ```
 
 ### Reset, resize, trim, clear 
+Resizing, resetting, trmming, and clearing dynamic maps can be accomplished
+fairly easily.
+```java
+DynamicMap<String, String> map = new DynamicMap<>() {
+  {
+    add("String 1 Key", "String 1 Value");
+    add("String 2 Key", "String 2 Value");
+    add("String 3 Key", "String 3 Value");
+    add("String 4 Key", "String 4 Value");
+    add("String 5 Key", "String 5 Value");
+  }
+};
+```
 
 #### Reset
+Resetting a map will clear all of the values, resize all of the internal
+arrays, and entirely reset the map. This is analogous to completely 
+re-instantiating the map.
+```java
+map.reset();
+```
 
 #### Trim
+Trimming a map helps to optimize the map's memory footprint by cutting of any
+values that aren't allocated to the map's external-facing arrays. Trimming the
+map will decrease the map's memory footprint at the expense of an allocation
+time, as the map's arrays need to be re-allocated following a trimming. This
+method should be used whenever a map won't recieve any more entries.
+```java
+map.trim();
+```
 
 #### Clear 
+Clearing a map will reset all of the values, but none of the keys.
+```java
+map.clear();
+```
 
 ### Size
+Who doesn't love knowing about the size of a map? Really, tell me - who doesn't?
+```java
+DynamicMap<String, String> map = new DynamicMap<>() {
+  {
+    add("String 1 Key", "String 1 Value");
+    add("String 2 Key", "String 2 Value");
+    add("String 3 Key", "String 3 Value");
+    add("String 4 Key", "String 4 Value");
+    add("String 5 Key", "String 5 Value");
+  }
+};
+```
 
-#### Real Size 
+#### Real Size
+"Real size" is defined as the amount of space that's actually allocated to
+each of the arrays. This number is equal to the real size of each of the
+component dynamic arrays combined. If you're a regular user using the map for
+regular things, you won't need to ever use this method - use `size()` instead.
+```java
+map.realSize();
+``` 
 
 #### Size 
+Size is defined as the amount of entries in the map. An entry is defined as
+a pair of keys and values. Clearing the map will not affect the size of the map.
+```java
+map.size();
+```
 
 ### Map iteration
+Map iteration isn't all that challenging. It functions in a similiar manner to
+the iteration features in other data structures.
+
+#### Iterate with a `BiConsumer<K, V>`
+```java
+DynamicMap<String, String> map = new DynamicMap<>() {
+  {
+    add("String 1 Key", "String 1 Value");
+    add("String 2 Key", "String 2 Value");
+    add("String 3 Key", "String 3 Value");
+    add("String 4 Key", "String 4 Value");
+    add("String 5 Key", "String 5 Value");
+  }
+};
+
+map.itr().forEach((k, v) -> {
+  System.out.println("Key: " + k);
+  System.out.println("Value: " + v);
+  System.out.println("");
+});
+// Prints the following:
+// Key: String 1 Key
+// Value: String 1 Value
+// 
+// Key: String 2 Key
+// Value: String 2 Value
+// 
+// Key: String 3 Key
+// Value: String 3 Value
+// 
+// Key: String 4 Key
+// Value: String 4 Value
+// 
+// Key: String 5 Key
+// Value: String 5 Value
+```
+
+#### Iterate with a `Runnable`
+```java
+DynamicMap<String, String> map = new DynamicMap<>() {
+  {
+    add("String 1 Key", "String 1 Value");
+    add("String 2 Key", "String 2 Value");
+    add("String 3 Key", "String 3 Value");
+    add("String 4 Key", "String 4 Value");
+    add("String 5 Key", "String 5 Value");
+  }
+};
+
+map.itr().forEach(() -> {
+  try {
+    int previousIndex = map.itr().previousIndex();
+    String previousKey = map.itr().previousKey();
+    String previousValue = map.itr().previousValue();
+  } catch (Exception ignored) {}
+  
+  int index = map.itr().index();
+  String key = map.itr().key();
+  String value = map.itr().value();
+
+  try {
+    int nextIndex = map.itr().nextIndex();
+    String nextKey = map.itr().nextKey();
+    String nextValue = map.itr().nextValue();
+  } catch (Exception ignored) {}
+});
+```
