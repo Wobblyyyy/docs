@@ -1,7 +1,7 @@
 ---
 layout: default
 title: EDT DynamicArray
-parent: edt
+parent: EDT
 nav_order: 1
 ---
 
@@ -88,11 +88,13 @@ DynamicArray<String> array = new DynamicArray<>(
 
 #### Method 6: With class initializer
 ```java
-DynamicArray<String> array = new DynamicArray<>() {{
-  add("String 1");
-  add("String 2");
-  add("String 3");
-}}
+DynamicArray<String> array = new DynamicArray<>() {
+  {
+    add("String 1");
+    add("String 2");
+    add("String 3");
+  }
+};
 ```
 
 
@@ -100,13 +102,24 @@ DynamicArray<String> array = new DynamicArray<>() {{
 ```java
 // Create a new dynamic array.
 DynamicArray<String> array = new DynamicArray<>();
+```
 
+#### Add without index 
+```java 
 // Add elements to the array.
 array.add("String 1");    // ["String 1"]
 array.add("String 2");    // ["String 1", "String 2"]
 array.add("String 3");    // ["String 1", "String 2", "String 3"]
+```
+
+#### Add with index 
+```java 
 array.add(0, "String 0"); // ["String 0", "String 1"...]
 // The last of those calls adds at a specific index.
+```
+
+#### Add an array
+```java 
 array.add(new String[] {
   "String 4",
   "String 5"
@@ -131,21 +144,29 @@ array.set(2, "String 3"); // Set the second "String 2" to "String 3"
 ### Remove
 ```java
 // Create a new array and add 3 values.
-DynamicArray<String> array = new DynamicArray<>() {{
-  add("String 1");
-  add("String 2");
-  add("String 3");
-  add("String 3");
-  add("String 3");
-}};
+DynamicArray<String> array = new DynamicArray<>() {
+  {
+    add("String 1");
+    add("String 2");
+    add("String 3");
+    add("String 3");
+    add("String 3");
+  }
+};
 // Dammit! We added String 3 too many times. Let's get rid of all 
 // the instances of "String 3" in the array.
+```
 
+#### Remove last element
+```java 
 // Method 1: No parameter remove call.
 array.remove();
 array.remove();
 array.remove();
+```
 
+#### Remove by index 
+```java
 // Method 2: Remove-by-index call.
 int index;
 while ((index = array.indexOf("String 3")) >= 0) {
@@ -154,10 +175,16 @@ while ((index = array.indexOf("String 3")) >= 0) {
   // array, remove it from the array.
   array.remove(index);
 }
+```
 
+#### Remove by several indexes
+```java 
 // Method 3: Remove-by-indicies call.
 array.remove(new int[] {2, 3, 4});
+```
 
+#### Remove everything after
+```java 
 // Method 4: Remove after call.
 array.removeAfter(array.indexOf("String 3"));
 ``` 
@@ -165,11 +192,13 @@ array.removeAfter(array.indexOf("String 3"));
 ### Index
 ```java
 // Create a new array and add 3 values.
-DynamicArray<String> array = new DynamicArray<>() {{
-  add("String 1");
-  add("String 2");
-  add("String 3");
-}};
+DynamicArray<String> array = new DynamicArray<>() {
+  {
+    add("String 1");
+    add("String 2");
+    add("String 3");
+  }
+};
 
 // Get the index of each of the strings.
 int index1 = array.indexOf("String 1"); // 0
@@ -180,11 +209,13 @@ int index3 = array.indexOf("String 3"); // 2
 ### Is empty, contains
 ```java
 // Create a new array and add 3 values.
-DynamicArray<String> array = new DynamicArray<>() {{
-  add("String 1");
-  add("String 2");
-  add("String 3");
-}};
+DynamicArray<String> array = new DynamicArray<>() {
+  {
+    add("String 1");
+    add("String 2");
+    add("String 3");
+  }
+};
 
 // Get the index of each of the strings.
 boolean empty = array.isEmpty(); // no, it's not empty: false
@@ -195,22 +226,36 @@ boolean containsB = array.contains("String 4"); // no  : false
 ### As Array, ArrayList, List
 ```java
 // Create a new array and add 3 values.
-DynamicArray<String> array = new DynamicArray<>() {{
-  add("String 1");
-  add("String 2");
-  add("String 3");
-}};
+DynamicArray<String> array = new DynamicArray<>() {
+  {
+    add("String 1");
+    add("String 2");
+    add("String 3");
+  }
+};
+```
 
+#### As an Object array
+```java 
 // As an array of objects
 Object[] asObjectArray = array.toArray();
+```
 
+#### As a <E> array
+```java 
 // As an array of String elements
 String[] strings = new String[array.size()];
 strings = array.toArray(strings);
+```
 
+#### As an ArrayList<Object>
+```java 
 // As an ArrayList of objects
 ArrayList<Object> asArrayList = array.toArrayList();
+```
 
+#### As an ArrayList<E>
+```java
 // As an ArrayList of String elements
 ArrayList<String> swagList = new ArrayList<>().addAll(array.toArray(new String[array.size()]));
 ``` 
@@ -218,12 +263,17 @@ ArrayList<String> swagList = new ArrayList<>().addAll(array.toArray(new String[a
 ### Trim, Clear, Reset, and free up memory
 ```java
 // Create a new array and add 3 values.
-DynamicArray<String> array = new DynamicArray<>() {{
-  add("String 1");
-  add("String 2");
-  add("String 3");
-}};
+DynamicArray<String> array = new DynamicArray<>() {
+  {
+    add("String 1");
+    add("String 2");
+    add("String 3");
+  }
+};
+```
 
+#### Trim
+```java 
 // The real size of the array. By default, unless otherwise specified, this
 // is 10. This means that the array is technically allocated to 10 in length.
 // To you, it looks like the array is only 3 in length. But internally, the
@@ -238,26 +288,38 @@ int size = array.size();         // 3
 array.trim(); // Trim the array. Let's take a look at the real size now.
 realSize = array.realSize(); // Only 3!
 size = array.size();         // 3
+```
 
+#### Clear
+```java 
 // Clear!
 // This method will set all of the values in the active portion of the array
 // to "null".
 array.clear(); // clear the array
 String test = array.get(0); // null
+```
 
+#### Reset 
+```java 
 // Reset the array!
 array.reset(); // reset the entire array to the default size 
 String asString = Arrays.toString(array.toArray()); // []
 ```
+
 ### Iteration
 ```java
 // Create a new array and add 3 values.
-DynamicArray<String> array = new DynamicArray<>() {{
-  add("String 1");
-  add("String 2");
-  add("String 3");
-}};
+DynamicArray<String> array = new DynamicArray<>() {
+  {
+    add("String 1");
+    add("String 2");
+    add("String 3");
+  }
+};
+```
 
+#### `Consumer<E>` iteration
+```java 
 // Iterate over the entire array, print out each of the values
 array.itr().forEach(s -> {
   System.out.println(s);
@@ -266,7 +328,10 @@ array.itr().forEach(s -> {
 // >> String 1
 // >> String 2
 // >> String 3
+```
 
+#### `Runnable` and extended iteration
+```java 
 // Iterate over the array, get previous index, current index, next
 // index, previous element, current element, and next element.
 array.itr().forEach(() -> {
