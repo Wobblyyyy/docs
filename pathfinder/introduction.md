@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Video Guides
+title: Introduction 
 parent: Pathfinder
 nav_order: 4
 ---
