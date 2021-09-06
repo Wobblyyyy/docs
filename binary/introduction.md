@@ -13,6 +13,9 @@ computational theory. You may be wondering - who am I? Well, I'm none other
 than Colin Robertson himself. What are my credentials? I built a 16 bit
 computer in Minecraft. Also, I'm a nerd. 
 
+**If you want to get right into the content, click on the link that says
+"number systems."
+
 ##### TABLE OF CONTENTS
 1. 
 {:toc}
