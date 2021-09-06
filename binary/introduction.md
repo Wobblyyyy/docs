@@ -483,7 +483,7 @@ rules that we follow.
 
 ## All about logic gates!
 Yay! We're finally here. There are quite a few logic gates. I'm going to
-name & describe each of them here, and will then go more in-depth on how
+name and describe each of them here, and will then go more in-depth on how
 the logic gate actually functions.
 ```
 NAME  | ALIAS 
