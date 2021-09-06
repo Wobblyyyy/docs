@@ -1,3 +1,9 @@
+---
+layout: default
+title: Introduction
+parent: Binary
+---
+
 # Binary
 So... you're interested in binary, huh? Well, you've come to the right place.
 If you're a fan of half-baked sarcasm, computational theory, entirely useless
@@ -6,6 +12,10 @@ of those, except for the cute cats. But I do have the sarcasm and the
 computational theory. You may be wondering - who am I? Well, I'm none other
 than Colin Robertson himself. What are my credentials? I built a 16 bit
 computer in Minecraft. Also, I'm a nerd. 
+
+##### TABLE OF CONTENTS
+1. 
+{:toc}
 
 ## A foreword
 I tend to be rather verbose, so there's a lot of text here. There's a handy
