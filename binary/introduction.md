@@ -548,15 +548,19 @@ we know what a NOT logic gate is, let's talk about the remaining gates.
 - NOR is the logical compliment to OR.
 - NAND is the logical compliment to AND.
 - XNOR is the logical compliment to XOR.
+
 A logical complement is a fancy word for saying "opposite of." Here's yet
 another table to break it down even further.
+
 ```
 NOR  | OR + NOT
 NAND | AND + NOT
 XNOR | XOR + NOT
 ```
+
 To put it really simply, NOR, NAND, and XNOR do exactly the same as their
 counterparts, except the output is reversed. For example:
+
 ```
 XOR GATE
 INPUT 1 | INPUT 2 | OUTPUT
