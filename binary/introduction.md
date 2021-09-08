@@ -83,6 +83,7 @@ My top contenders were:
 - Java: executable JAR files can run on just about any computer built in the
   past decade. Also, modern JVMs are well-optimized, meaniing performance
   shouldn't be too bad.
+  
 The most important considerations I had to take into account were portability
 and performance. Portability because I use Linux for development and Windows
 for gaming, so I'd like to be able to play the game on both. Performance so
@@ -217,10 +218,11 @@ Remember how I said digits are arbitrary? They're literally just random
 squiggly lines we associate with a value. I could say that the letter F
 was a digit. Let's define F. For the sake of simplicity, I'll only be
 working with integers here.
-- F is greater than 15.
-- F is less than 17.
+- F is greater than 14.
+- F is less than 16.
+
 So, using some deductive reasoning here, we can determine that F is
-equivalent to the decimal number 16. F isn't just a random letter I'm making
+equivalent to the decimal number 15. F isn't just a random letter I'm making
 up - it's an actual digit used in the hexadecimal system.
 
 ### Hexadecimal notation
@@ -379,7 +381,7 @@ at any point, confused, you have a couple of options.
 1. Re-read.
 2. Re-read the binary numbers section.
 3. Google it.
-4. Google a lot of stuff, actually.
+4. Pray...?
 
 ## What's a logic gate?
 Glad you asked! A logic gate is the very foundation of binary logic. (In the
@@ -400,12 +402,14 @@ already familiar with what a logic gate is. So, let's break it down a bit.
 
 > A logic gate is an idealized model of computation or physical
 > eletronic device...
+
 This basically means it's a conceptual model, and not something physical, like
 a rock. You know what a rock is, and you know it exists. A logic gate, however,
 is only as real as something like math is. It's not physically here, but we
 know it exists. Does that make sense? 
 
 > ... implementing a boolean function...
+
 A boolean is something that can be in one of two conditions - true or false.
 If you've been paying attention, a binary bit can be in one of two conditions
 as well - 0 or 1. Let's do some matching!
@@ -421,6 +425,7 @@ be used interchangably, and Java opts to use "boolean." Anyways.
 
 > ... a logical operation performed on one or more binary inputs that
 > produces a single binary output.
+
 Alright, we're almost done with the breakdown! Let's go! A logical operation
 is an operation that, given the same inputs, always produces the same outputs.
 For example, if you're working in the decimal number system and you add the
@@ -765,6 +770,7 @@ in decimal, respectively).
 Let's say you want to add the following two numbers:
 - `0101` (decimal equivalent: 4) ("number 1")
 - `0111` (decimal equivalent: 7) ("number 2")
+
 In total, there are EIGHT digits - four digits in number 1, and four digits
 in number 2. If you notice, our adding machine accepts 8 inputs. Let's call
 number 1 "number A" and number 2 "number B". The four digits of number 1
@@ -773,11 +779,13 @@ would be inserted into:
 - in 2 a
 - in 3 a
 - in 4 a
+
 ... and the four digits of number 2 would be inserted into:
 - in 1 b
 - in 2 b
 - in 3 b
 - in 4 b
+
 Make sense? Hopefully. If you don't get what's going on, you should really
 go look up a better diagram - it's kind of hard to express this concept
 effectively simply through text. And of course, a 4 bit adder has 4 bits of
@@ -869,6 +877,7 @@ website, or why you can save a file locally and load it back later. There's
 two ways information can be stored on a computer:
 - Using magic
 - Using bytes
+
 Magic, although rather cool, isn't very practical here, so we'll look at the
 other method - bytes. 
 
@@ -952,6 +961,7 @@ part. Conceptually, however, there's one very simple concept. Or two, actually.
 But you get the point.
 - RAM (Random Access Memory)
 - Storage
+
 Let's start with RAM, because it's the simpler of the two.
 
 ### Random Access Memory
@@ -960,6 +970,7 @@ information. This device has two features:
 - We can write information to the device, and it will remember the state.
 - We can read information from the device, and it'll output whatever the last
   state you wrote to it was.
+ 
 This is how RAM works in real life. Your computer likely has several billion
 bytes of RAM, whereas the conceptual computers we're talking about here will
 likely have around 64-128 bytes. Yes, bytes - not kilobytes, but bytes.
@@ -975,6 +986,7 @@ support for it. The idea here is as follows:
 - Each byte of ram has a 2-byte address.
 - The first of the two bytes is the "X" position of the RAM.
 - The second of the two bytes is the "Y" position of the RAM.
+
 X and Y values can both range from 0-255, respectively. 
 
 Just as a note: we'll use hexadecimal to represent RAM addresses. This is an
@@ -999,6 +1011,7 @@ Okay. So. We have a magical machine that accepts three inputs:
 - A X coordinate.
 - A Y coordinate.
 - A byte of information to store.
+
 If we feed the machine the following input:
 ```
 X: 0x00
@@ -1055,6 +1068,7 @@ our adding machine supports. Take a look:
 - Saving up to three unique 8-bit numbers.
 - You can "remember" one of the saved 8-bit numbers and use that number as an
   input (one of the numbers that's being added).
+ 
 You may be wondering - how exactly do you do that? I'll tell you how you do
 it. It's not all that hard, to be honest.
 
@@ -1094,6 +1108,7 @@ Let's say our imaginary user has a couple of inputs.
   value and insert it as the user's first number, and the other of the buttons
   will read that value and insert it as the user's second number.
 - Addresses 0x0001 and 0x0002 also have two buttons each. 
+
 So, in theory, we can save up to three binary numbers and add them to
 eachother. This is great! Right? Yeah. We're at the level of a rudimentary
 calculator you can purchase on Amazon for about a dollar. But that's alright -
@@ -1110,6 +1125,7 @@ of numbers now, here's the process:
 - Enter another number.
 - Add the two numbers (one from memory, one from input).
 - Save the two numbers and repeat.
+
 Makes sense? Now, I say an infinite amount of numbers because, in theory, you
 can add an infinite number of 0x00's without exceeding the maximum possible
 8-bit value (1111 1111). In practice, we can only add a limited amount of
@@ -1148,6 +1164,7 @@ them more easily. Normally, the process we'd have to go through is:
 - Save and recall S2, then add it to D, resulting in S3.
 - Save/recall S3, add it to E, resulting in S4.
 - Save/recall S4, add it to F, resulting in S5, which is our final output.
+
 You could also use multiple adding machines to optimize the runtime of our
 calculation. If we have three adding machines, we can add up to 6 8-bit
 numbers at once, outputting 3 8-bit numbers, which is better than 2 and 1.
@@ -1187,6 +1204,7 @@ a CPU, however, we're going to need to know about all of the parts of a CPU.
   need to keep track of the numbers. Instead of storing the numbers in RAM,
   which can have (comparatively) long read/write times, we'd store that
   information in a CPU register, which is immediately available to the CPU.
+  
 Alright, so now that we've gotten that out of the way. What's next? How do we
 actually design a processor? Here's a list of specifications we want the CPU
 to have. These are entirely arbitrary and I'm just making them up right now.
@@ -1207,6 +1225,7 @@ to have. These are entirely arbitrary and I'm just making them up right now.
   Anybody without a solid understanding of computer science will be completely
   and utterly lost trying to use your system for anything more advanced than
   adding two numbers together.
+  
 Now that we've worked all of that out, let's get on to the fun part. It's not
 actually very fun, but... it's fun for me! Almost...
 
@@ -1258,7 +1277,8 @@ OPCODE | OPERATION
 0x06   | 
 0x07   | 
 0x08   |
-0x09   |
+0x09   | Copy a byte from a register to a memory address stored in another
+       | register (register addr, memory addr (in register))
 0x0a   | Jump to a specific instruction (instruction address (1 byte))
 0x0b   | Copy a byte from a register to memory (register addr, memory addr)
 0x0c   | Copy a byte from memory to a register (memory addr, register addr)
@@ -1548,6 +1568,75 @@ if (c == 0) {
 ```
 You're checking the memory address the compiler said `c` is at and seeing
 if it equals 0. Pretty neat, right? 
+
+Anyways - here's why static addressing is a bad thing here. Notice how each
+instruction (`0x02 0x8f 0x08`) is a total of three bytes? Let's break that 
+down for a moment.
+- `0x02` is the opcode (write a byte to memory)
+- `0x8f` is the memory address to write the byte to
+- `0x08` is the byte to write to the memory address
+
+So even when we finish printing all of our letters, and we jump back to the
+very first instruction, we're just going to be printing to the same location,
+so the screen isn't updated at all. What we want to happen:
+```
+hello world
+hello world
+hello world
+hello world
+```
+... vs. what's actually happening:
+```
+hello world
+```
+
+That's not very cool! How can we fix that, you may ask? 
+
+#### Fixing static addressing (and using addition)
+Alright. So. We want to make our terminal's loop keep outputting letters,
+constantly - we don't want to only have one 'hello world' on the screen. To
+fix this, we need to make use of another opcode. Several more, actually.
+- `0x03` pushes a single byte to the stack. (byte)
+- `0x01` writes a byte to a register. (register address, byte)
+- `0x0f` gets and remove the value at the top of the stack, adds it with a byte at
+  a specific register address, and pushes that sum to the stack. (register address)
+  
+```
+0x03 0x8f // push start address to the stack (instruction #1)
+0x01 0x00 0x0b // write the decimal number 11 to register 0x00
+
+// calculate all of the positions 
+0x01 0x01 0x00
+0x01 0x02 0x01
+0x01 0x03 0x02
+0x01 0x04 0x03
+0x01 0x05 0x04
+0x01 0x06 0x05
+0x01 0x07 0x06
+0x01 0x08 0x07
+0x01 0x09 0x08
+0x01 0x0a 0x09
+0x01 0x0b 0x0a
+0x01 0x0c 0x0b
+
+// push byte to stack
+0x04 0x01
+0x0f 0x00
+0x05 0x01
+0x09 0x08 0x01 // this prints h
+
+0x02 0x8f 0x08 | 'h'
+0x02 0x90 0x05 | 'e'
+0x02 0x91 0x0c | 'l'
+0x02 0x92 0x0c | 'l'
+0x02 0x93 0x0f | 'o'
+0x02 0x94 0x00 | ' '
+0x02 0x95 0x17 | 'w'
+0x02 0x96 0x0f | 'o'
+0x02 0x97 0x12 | 'r'
+0x02 0x98 0x0c | 'l'
+0x02 0x99 0x04 | 'd'
+```
 
 #### Compiler theory
 I hate to break it to you, but that's way down the line. Unless you're building
