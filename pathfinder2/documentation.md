@@ -7,7 +7,7 @@ parent: Pathfinder2
 # Pathfinder Documentation
 Because who doesn't love some documentation? I know I certainly do.
 
-# Table of Contents
+##### TABLE OF CONTENTS
 1.
 {:toc}
 
