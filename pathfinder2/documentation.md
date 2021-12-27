@@ -8,7 +8,7 @@ parent: Pathfinder2
 Because who doesn't love some documentation? I know I certainly do.
 
 ##### TABLE OF CONTENTS
-1.
+* TOC
 {:toc}
 
 ## Geometry
