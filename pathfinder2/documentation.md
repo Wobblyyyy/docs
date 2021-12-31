@@ -4,8 +4,11 @@ title: Documentation
 parent: Pathfinder2
 ---
 
-# Pathfinder Documentation
-Because who doesn't love some documentation? I know I certainly do.
+Who doesn't love some documentation? I know I certainly do. This is the
+primary source of documentation for the Pathfinder2 project. Although yes,
+it would definitely be a better idea to separate everything by file, I don't 
+have the energy for that right now, so all of it is getting dumped into
+one huge file.
 
 ##### TABLE OF CONTENTS
 * TOC
@@ -169,7 +172,7 @@ Pathfinder's operation is designed to be relatively simple.
 
 ### Ticking Pathfinder
 This is absolutely crucial to operating the library - you need to "tick" it.
-Ticking is the process of updating the robot's translation based on it's
+Ticking is the process of updating the robot's translation based on its
 current position and target position (more specifically, the trajectory the
 robot is currently following). The `Pathfinder` class provides a `tick()`
 method that does exactly this. If you're using the library in a loop, you
@@ -184,7 +187,7 @@ while (opModeIsActive()) {
 }
 ```
 
-#### Ticking Pathfinder outside of a loop
+#### Ticking Pathfinder outside a loop
 Say you're using the library during autonomous. You could simply do
 something like:
 ```java
@@ -232,9 +235,7 @@ public class ExampleMethodChaining() {
             // path finishes, or (b) the elapsed time is
             // greater than or equal to 4 seconds
             .goTo(TARGET_C)
-            .andThen((pathfinder -> {
-              doSomething();
-            }))
+            .andThen((pathfinder -> doSomething()))
             .goTo(TARGET_D)
             .tickUntil(4_000, this::shouldRun, (pathfinder, elapsedMs) -> {
               // this has a timeout of 4 seconds
@@ -254,6 +255,123 @@ public class ExampleMethodChaining() {
               );
             });
   }
+}
+```
+
+### Manually controlling Pathfinder's movement
+The `Pathfinder` class has several methods for manually controlling the motion
+of the robot. 
+
+#### Setting the robot's translation
+`setTranslation(Translation)` will set the robot's translation.
+```java
+public class ExampleSetTranslation {
+    public void example() {
+        Pathfinder pathfinder = new Pathfinder(...);
+        Translation translation = new Translation(0.5, 0.5, 0);
+        pathfinder.setTranslation(translation);
+    }
+}
+```
+
+#### Controlling the robot in...
+Here are some quick tips on controlling the robot in different modes.
+
+##### Autonomous
+If the robot is in an autonomous period, it's strongly encouraged you make
+use of trajectories and followers. You can absolutely control your robot
+however you'd like, but I would strongly encourage you to make use of
+trajectories, as they greatly simplify your autonomous code and allow you to
+do a lot more with your autonomous.
+
+##### Tele-op
+Whenever the robot is operating in tele-op mode, you'll (probably) want the
+robot to respond to driver input. This can be accomplished with the previously
+mentioned `setTranslation(Translation)` method.
+
+```java
+public void runTeleOp() {
+    Pathfinder pathfinder = new Pathfinder(...);
+    
+    while (true) {
+        double x = gamepad1.left_stick_x;
+        double y = -gamepad1.left_stick_y;
+        double z = gamepad1.right_stick_x;
+        
+        Translation translation = new Translation(x, y, z);
+        
+        pathfinder.setTranslation(translation);
+    }
+}
+```
+
+If you're using the `tick()` method during tele-op, the translation will be
+automatically changed whenever the `tick()` method is called. I'd suggest you
+either use one or the other at a time - if you're using `setTranslation`, you
+shouldn't be using `tick`, and vice versa.
+
+#### Stopping and pausing
+
+##### Stopping Pathfinder's execution
+Pathfinder's execution and movement are NOT linked, so it's possible to cancel
+ONLY Pathfinder's execution or ONLY Pathfinder's movement.
+
+`Pathfinder` provides a method, `clear()`, that can be used to stop the
+execution of the library. This will clear the queue of `Follower` instances,
+which will transitively clear any queued `Trajectory` instances.
+
+```java
+Pathfinder pathfinder = new Pathfinder(...);
+pathfinder.clear();
+```
+
+Note that stopping execution will NOT stop the movement of the robot.
+
+##### Stopping the robot (stopping movement)
+Physically stopping the robot is an incredibly common task that I'm sure you
+will, at some point, need to do. To physically stop the robot, set the
+translation to a translation with X, Y, and Z values of 0.
+
+```java
+Pathfinder pathfinder = new Pathfinder(...);
+pathfinder.setTranslation(new Translation(0, 0, 0));
+```
+
+If you stop the robot's movement WITHOUT also stopping Pathfinder's execution,
+your robot will begin moving again as soon as the `tick()` method is called.
+In order to completely stop the robot, you need to clear BOTH the executors
+and the translation.
+
+##### Stopping execution and movement
+Surprisingly enough, it's exactly what you'd expect.
+
+```java
+Pathfinder pathfinder = new Pathfinder(...);
+
+// stop the execution
+pathfinder.clear();
+
+// stop the movement
+pathfinder.setTranslation(new Translation(0, 0, 0));
+```
+
+##### Pausing
+There's no officially supported way to pause Pathfinder temporarily. For now,
+you can just stop calling the `tick()` method for as long as you'd like to
+pause Pathfinder. This will work perfectly fine for anything that does not
+have elapsed time as a parameter.
+
+```java
+public void run() {
+    Pathfinder pathfinder = new Pathfinder(...);
+    boolean isPaused = false;
+    while (true) {
+        if (isPaused) continue;
+        
+        pathfinder.tick();
+        
+        // other code...
+    }
 }
 ```
 
@@ -287,7 +405,7 @@ If you're going to implement your own `Drive`, I'd encourage you to use the
 doesn't do much, but it removes the need to implement methods from the
 `Modifiable` interface.
 
-##### Using the `Drive` class
+##### Using the `Drive` interface
 It's pretty simple, to be honest. There are two main ways to use translations.
 It's worth noting that the `Drive` interface assumes that if your robot is
 given a translation, it'll move according to that translation, relative to
@@ -337,10 +455,204 @@ of the `Odometry` interface: `me.wobblyyyy.pathfinder2.robot.AbstractOdometry`.
 The `Odometry` interface is incredibly simple - it should report the robot's
 position on the field. That's it. This position should be absolute.
 
+##### Methods from `me.wobblyyyy.pathfinder2.robot.Odometry`
+There's a lot of methods in the Odometry interface, to be honest. While
+I absolutely could list all of them out, I'm incredibly lazy and don't have
+the energy for that. Instead, here's a copy-pasted version of the interface.
+
+```java
+public interface Odometry {
+    PointXYZ getRawPosition();
+
+    /**
+     * Get the position produced by {@link #getRawPosition()} combined with
+     * the offset produced by {@link #getOffset()}.
+     *
+     * @return the odometry system's position, with an offset.
+     */
+    PointXYZ getPosition();
+
+    /**
+     * Get the odometry system's offset.
+     *
+     * @return the odometry system's offset.
+     */
+    PointXYZ getOffset();
+
+    /**
+     * Set the odometry system's offset.
+     *
+     * @param offset the new offset. This offset value will replace whatever
+     *               the old offset value was.
+     */
+    void setOffset(PointXYZ offset);
+
+    /**
+     * Get the X value of the offset.
+     *
+     * @return the X value of the offset.
+     */
+    double getOffsetX();
+
+    /**
+     * Get the Y value of the offset.
+     *
+     * @return the Y value of the offset.
+     */
+    double getOffsetY();
+
+    /**
+     * Get the Z value of the offset.
+     *
+     * @return the Z value of the offset.
+     */
+    Angle getOffsetZ();
+
+    /**
+     * Modify the existing offset by whatever offset you provide.
+     *
+     * @param offset the offset to add to the existing offset.
+     */
+    void offsetBy(PointXYZ offset);
+
+    /**
+     * Remove the current offset. This will set the offset to (0, 0, 0).
+     */
+    void removeOffset();
+
+    /**
+     * Create an offset that makes the odometry's current position the
+     * provided target position.
+     *
+     * @param targetPosition the position you'd like the odometry system
+     *                       to be offset to.
+     */
+    void offsetSoPositionIs(PointXYZ targetPosition);
+
+    /**
+     * Find an offset that makes the odometry's current position equal to
+     * (0, 0) and apply it.
+     */
+    void zeroOdometry();
+
+    /**
+     * Get the robot's X position.
+     *
+     * @return {@link #getPosition()}.
+     */
+    double getX();
+
+    /**
+     * Get the robot's Y position.
+     *
+     * @return {@link #getPosition()}.
+     */
+    double getY();
+
+    /**
+     * Get the robot's Z position.
+     *
+     * @return {@link #getPosition()}.
+     */
+    Angle getZ();
+
+    /**
+     * Get the robot's current heading in radians.
+     *
+     * @return the robot's current heading in radians.
+     */
+    double getRad();
+
+    /**
+     * Get the robot's current heading in degrees.
+     *
+     * @return the robot's current heading in degrees.
+     */
+    double getDeg();
+
+    /**
+     * Get the raw X value from the robot.
+     *
+     * @return the robot's raw X value.
+     * @see #getRawPosition()
+     */
+    double getRawX();
+
+    /**
+     * Get the raw Y value from the robot.
+     *
+     * @return the robot's raw Y value.
+     * @see #getRawPosition()
+     */
+    double getRawY();
+
+    /**
+     * Get the raw Z value from the robot.
+     *
+     * @return the robot's raw Z value.
+     * @see #getRawPosition()
+     */
+    Angle getRawZ();
+
+    /**
+     * Get the robot's raw heading in radians.
+     *
+     * @return the robot's raw heading in radians.
+     */
+    double getRawRad();
+
+    /**
+     * Get the robot's raw heading in degrees.
+     *
+     * @return the robot's raw heading in degrees.
+     */
+    double getRawDeg();
+}
+```
+
+##### The `AbstractOdometry` class
+Please, for your own good, make use of the `AbstractOdometry` abstract class
+instead of implementing the entire `Odometry` interface yourself. You only
+need to write one method - `PointXYZ getRawPosition()`, which should return...
+well, it should return the robot's raw position.
+
+##### Using the `Odometry` interface
+There's not really all that much you can do with it.
+
+###### Modify the robot's position
+Refer to the following methods to modify the robot's position. It's suggested
+that you only modify the robot's position with the `Odometry` interface's
+methods, so you can eliminate as many potential sources of issues as possible.
+
+```java
+public interface Odometry {
+    // ...
+  
+    void setOffset(PointXYZ offset);
+    void offsetBy(PointXYZ offset);
+    void removeOffset();
+    void offsetSoPositionIs(PointXYZ targetPosition);
+    void zeroOdometry();
+    
+    // ...
+}
+```
+
 ### Trajectories
 Trajectories are the basis for Pathfinder's movement. Well, technically
 speaking, `Follower`s actually control your robot's movement, but instances
 of the `Trajectory` interface dictate how your robot moves.
+
+#### What's a `Follower`?
+You might see the term `Follower` mentioned in Pathfinder's documentation (or
+source code) at some point. A `Follower` is an internal class used to actually
+follow trajectories. You may have also seen `GenericFollowerGenerator`, the
+de facto `FollowerGenerator`, responsible for creating `Follower` instances
+that follow `Trajectory` instances. Putting that in writing makes it sound
+way more complicated than it actually is, but just know that `Follower` is used
+exclusively internally by Pathfinder. You can create your own implementations
+of `Follower` and `FollowerGenerator` because this library is fairly modular,
+but there's not much of a reason to.
 
 #### Linear trajectory
 The most simple kind of trajectory is the [linear trajectory](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/LinearTrajectory.java).
@@ -399,14 +711,14 @@ based exclusively on elapsed time.
  *                       will attempt to turn more slowly.
  */
 public TimedTrajectory(Translation translation,
-        double timeoutMs,
-        double speed,
-        double turnMultiplier) {
+                       double timeoutMs,
+                       double speed,
+                       double turnMultiplier) {
         this.translation = translation;
         this.timeoutMs = timeoutMs;
         this.speed = speed;
         this.turnMultiplier = turnMultiplier;
-        }
+}
 ```
 
 #### Spline trajectories
@@ -419,6 +731,45 @@ Splines are popular for trajectories because they allow you to move your robot
 quickly, utilizing the curve to cut time. You can also make a trajectory
 speed up or slow down or just about anything else, except not actually anything
 else.
+
+##### What's a step value?
+You'll see the term `step` used quite often when dealing with splines. In
+order to properly explain what it is, you'll need a bit of background info
+on how Pathfinder processes splines.
+
+A `Spline` is basically just an equation. You can input an X value and get
+a Y value as a result. This does two things - firstly, it means X values
+can't go positive AND negative - they can only go positive OR negative.
+Secondly, it means that you'll always need to supply an X value in order
+to calculate a Y value.
+
+If you used the robot's current position as that X value, then Pathfinder's
+target position would be exactly the same as its current position, so it
+would not move at all. 
+
+In order to circumvent this problem, there's a `step` values. This value is
+added to your robot's current X position in order to calculate a new target.
+
+###### Positive or negative?
+It's pretty simple, actually. If your robot is moving in a positive X direction
+(meaning X values are increasing), then you'll want a positive step value. If
+your robot is moving in a negative X direction (meaning X values are
+decreasing), then you'll want to use a negative step value.
+
+###### Determining a good step value
+Like everything else, it's just trial and error. A value somewhere around 0.5
+seems fairly good, right? Yeah. Looks fine to me. If you're reading this and
+you have a better idea for what a default step value is, please let me know
+(or just update this yourself).
+
+###### Issues with step values
+The most common issue you will encounter with splines is using an invalid
+step value. Well, that might not actually be the most common, but it sounds
+cooler if I put it like that. If you have a negative value when it should
+be positive (or a positive value when it should be negative), your robot will
+never move along the spline. Pathfinder won't throw any exceptions if this is
+the case, so it can be challenging to debug. Make sure your step value is
+approaching the same infinity as the rest of your points.
 
 ##### Creating splines with a factory (suggested)
 This is the easiest (and suggested) method of creating spline trajectories.
@@ -482,7 +833,7 @@ of the `AdvancedSplineTrajectory` class is included below.
  * @param tolerance      the tolerance used in determining if the robot is
  *                       actually at the target point. This tolerance
  *                       only affects the LAST of the points in the
- *                       trajectory - all of the other points ignore
+ *                       trajectory - all the other points ignore
  *                       whatever this value is.
  * @param angleTolerance the tolerance used for determining if the robot
  *                       is facing the correct direction. Like the
