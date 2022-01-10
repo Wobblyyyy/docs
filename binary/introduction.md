@@ -13,6 +13,12 @@ computational theory. You may be wondering - who am I? Well, I'm none other
 than Colin Robertson himself. What are my credentials? I built a 16 bit
 computer in Minecraft. Also, I'm a nerd. 
 
+## IMPORTANT NOTICE
+As of January 10th, 2022 (1/10/22), some information in this guide is misleading
+or inaccurate. I don't currently have plans to go through and update this. The
+core concepts of this guide are correct and accurate, but some of the opcode
+implementation information is misleading or confusing.
+
 **If you want to get right into the content, click on the link that says**
 **"number systems."**
 
