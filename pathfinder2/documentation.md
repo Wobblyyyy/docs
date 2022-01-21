@@ -1131,6 +1131,7 @@ A plugin is a piece of code that runs on top of Pathfinder and processes
 data in a way not normally possible with Pathfinder.
 ### Loading plugins
 #### Automatically loading plugins
+#### Disabling automatically loading plugins
 ### Creating a plugin
 
 ## Movement profile
@@ -1147,4 +1148,25 @@ data in a way not normally possible with Pathfinder.
 ### Playing movement back
 
 ## Zones
+### Zone-based events
+#### Using a zone processor
+##### On enter
+##### On exit
+##### While inside
+#### Using a listener
+##### On enter
+##### On exit
+##### While inside
+
+## Random
+### Generating a random string
+### `SupplierFilter`
+### Modifiers
+
+## Debugging and simulation tools
+### Simulated robot hardware
+#### Simulated classes
+#### Empty classes
+
+## Sensors and non-movement related classes
 
