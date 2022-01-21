@@ -1,7 +1,7 @@
 ---
 layout: default
-title: Documentation
-parent: Calibration
+title: Calibration
+parent: Pathfinder2
 ---
 
 Calibration is among the most important steps you'll need to take in order
