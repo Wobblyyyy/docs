@@ -1118,3 +1118,33 @@ public class BindingUserControls {
 
 Please note that this is NOT the best implementation of a multiplier-like
 concept. It's rather verbose and can be simplified greatly.
+
+## Using prebuilt utilities
+Prebuilt utilities are provided because they're common enough that I found
+it's worth including some abstraction.
+### Automatically rotate around a point
+### Control an elevator
+### Lock the robot's heading
+
+## Plugins
+A plugin is a piece of code that runs on top of Pathfinder and processes
+data in a way not normally possible with Pathfinder.
+### Loading plugins
+#### Automatically loading plugins
+### Creating a plugin
+
+## Movement profile
+### Velocity
+### Acceleration
+
+## Path generation
+### Pathfinding algorithm
+### Practical applications
+### Implementation
+
+## Recording and playback
+### Recording movement
+### Playing movement back
+
+## Zones
+
