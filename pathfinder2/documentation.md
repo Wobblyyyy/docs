@@ -643,6 +643,9 @@ Trajectories are the basis for Pathfinder's movement. Well, technically
 speaking, `Follower`s actually control your robot's movement, but instances
 of the `Trajectory` interface dictate how your robot moves.
 
+A trajectory instructs your robot on how to move around the field. They
+can be customized to modify how the robot moves.
+
 #### What's a `Follower`?
 You might see the term `Follower` mentioned in Pathfinder's documentation (or
 source code) at some point. A `Follower` is an internal class used to actually
@@ -661,6 +664,11 @@ It can be (and is) described as follows:
 > The most simple type of trajectory. A linear trajectory does nothing other
 > than go to a point at a linear speed. Such, there's not much you can
 > customize here. But it's simple, and it works. Hopefully, that is.
+
+Linear trajectories are the logical starting point if you've never used
+a `Trajectory` before. Although simple, linear trajectories aren't
+particularly fast: a well-optimized spline trajectory will almost always
+be more effective, albeit more complex.
 
 ##### Creating a linear trajectory
 The `LinearTrajectory` class has a single constructor, which accepts the
@@ -876,3 +884,237 @@ Trajectory trajectory1 = new AdvancedSplineTrajectoryBuilder()
         .add(new PointXYZ(6, 12, 0))
         .add(new PointXYZ(8, 24, 0)).build();
 ```
+
+### Listeners
+Listeners allow you to "listen" for certain conditions, making it easy to
+write event-driven code. Listeners need to be ticked, which happens when
+Pathfinder's `tick()` method calls the `tick()` method of Pathfinder's
+`ListenerManager`, which in turn calls the `tick()` method of all of the
+associated listeners.
+
+#### Using bindings
+The `listening` package of Pathfinder provides many utilities designed to
+simplify writing code for a robot. These utilities are customized to my
+preferences and using them may not be appropriate if a different solution
+is preferable.
+
+##### Binding buttons
+Buttons are a critical part of user input.
+```java
+import me.wobblyyyy.pathfinder2.utils.SupplierFilter;
+import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.listening.ListenerMode;
+
+public class BindingUserControls {
+    Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
+
+    public void bindControlsAndRun() {
+        // bind imaginary controls to an imaginary A button
+        pathfinder.getListenerManager()
+            .bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                aButton::isPressed,
+                (isPressed) -> isPressed,
+                (isPressed) -> {
+                    // code to be run whenever the A button has been
+                    // pressed
+                }
+            )
+            .bind(
+                ListenerMode.CONDITION_NEWLY_NOT_MET,
+                aButton::isPressed,
+                (isPressed) -> isPressed,
+                (isPressed) -> {
+                    // code to be run whenever the A button has been
+                    // released
+                }
+            );
+
+        // tick pathfinder forever and ever...
+        //                     ... and ever...
+        //                     ... and ever...
+        //                     ... and ever...
+        //                     ... and ever.
+        while (true)
+            pathfinder.tick();
+    }
+}
+```
+
+##### Binding arbitrary objects
+You can also bind arbitrary objects, allowing Pathfinder to handle just
+about any event-based functionality you want.
+```java
+import me.wobblyyyy.pathfinder2.utils.SupplierFilter;
+import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.listening.ListenerMode;
+
+public class BindingUserControls {
+    Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
+
+    // whenever x or y individually exceeds 500, print out
+    // "x value has exceeded 500!" or "y value has exceeded 500!"
+    // if both the x and y values exceed 500, print out
+    // "x AND y values have exceeded 500!"
+    // if only x or only y exceeds 500, print out
+    // "only x exceeds 500!" or "only y exceeds 500!"
+    public void bindControlsAndRun() {
+        pathfinder.getListenerManager()
+            .bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                () -> pathfinder.getPosition(),      // Supplier<PointXYZ>
+                (position) -> position.x() > 500,    // Predicate<PointXYZ>
+                (position) -> System.out.println("x value has exceeded 500!")
+            )
+            .bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                () -> pathfinder.getPosition(),      // Supplier<PointXYZ>
+                (position) -> position.y() > 500,    // Predicate<PointXYZ>
+                (position) -> System.out.println("y value has exceeded 500!")
+            )
+            .bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                () -> pathfinder.getPosition(),
+                (position) -> position.x() > 500 && position.y() > 500,
+                (position) -> System.out.println("x AND y values have exceeded 500!")
+            )
+            .bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                () -> SupplierFilter.trueThenAllFalse( // note that this is some
+                    () -> position.x() > 500,          // pretty terrible
+                    () -> position.y() > 500           // code - suppliers are
+                ),                                     // not appropriate here,
+                (bool) -> bool,                        // but this is only a demonstration, so who cares?
+                (bool) -> System.out.println("only x exceeds 500!")
+            )
+            .bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                () -> SupplierFilter.trueThenAllFalse(
+                    () -> position.y() > 500, // must be true
+                    () -> position.x() > 500  // must be false
+                ),
+                (bool) -> bool,
+                (bool) -> System.out.println("only y exceeds 500!")
+            );
+
+        while (true)
+            pathfinder.tick();
+    }
+}
+```
+
+##### Binding joysticks
+How else can you drive the robot? Exactly.
+```java
+import me.wobblyyyy.pathfinder2.utils.SupplierFilter;
+import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.listening.ListenerMode;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
+
+public class BindingUserControls {
+    Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
+
+    public void bindControlsAndRun() {
+        // example joystick values for demonstration purposes
+        double forwardsPower = 0.0;
+        double sidewaysPower = 0.0;
+        double turnPower = 0.0;
+
+        pathfinder
+            .bind(
+                ListenerMode.CONDITION_IS_MET,
+                () -> true,                    // true, so it's always executed
+                (isPressed) -> true,           // true, so it's always executed
+                (isPressed) -> {
+                    pathfinder.setTranslation(new Translation(
+                        forwardsPower,
+                        sidewaysPower,
+                        turnPower
+                    ));
+                }
+            );
+
+        while (true)
+            pathfinder.tick();
+    }
+}
+```
+
+##### Binding a speed modifier
+When one gear isn't cool enough... This sample builds upon the previous
+sample on binding joysticks.
+```java
+import me.wobblyyyy.pathfinder2.utils.SupplierFilter;
+import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.listening.ListenerMode;
+import me.wobblyyyy.pathfinder2.geometry.Translation;
+
+import java.util.atomic.AtomicReference;
+
+public class BindingUserControls {
+    Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
+
+    public void bindControlsAndRun() {
+        // example joystick values for demonstration purposes
+        // range: -1.0 to 1.0
+        double forwardsPower = 0.0;
+        double sidewaysPower = 0.0;
+        double turnPower = 0.0;
+
+        // example trigger values for demonstration purposes
+        // range: 0.0 to 1.0
+        double rightTrigger = 0.0;
+        double leftTrigger = 0.0;
+
+        // needs to be an atomic reference because non-effectively final
+        // values cannot be used from inside lambdas
+        AtomicReference<Double> mult = new AtomicReference<>(0d);
+
+        pathfinder.getListenerManager()
+            .bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                () -> SupplierFilter.trueThenAllFalse( // make sure ONLY
+                    () -> rightTrigger > 0,            // the right trigger
+                    () -> leftTrigger > 0              // is pressed
+                ),
+                (isPressed) -> isPressed,
+                (isPressed) -> {
+                    // if it's pressed, set the multiplier to 1.0: full
+                    // speed!
+                    mult.set(1.0);
+                }
+            )
+            .bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                () -> SupplierFilter.trueThenAllFalse( // make sure ONLY
+                    () -> leftTrigger > 0,             // the left trigger
+                    () -> rightTrigger > 0             // is pressed
+                ),
+                (isPressed) -> isPressed,
+                (isPressed) -> {
+                    // if it's pressed, set the multiplier to 0.25: very
+                    // slow, for precise movement.
+                    mult.set(0.25);
+                }
+            )
+            .bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                () -> SupplierFilter.allFalse( // make sure BOTH of the
+                    () -> rightTrigger > 0,    // triggers are NOT pressed
+                    () -> leftTrigger > 0
+                ),
+                (isPressed) -> isPressed,
+                (isPressed) -> {
+                    // the default multiplier is 0.5
+                    mult.set(0.5);
+                }
+            );
+
+        while (true)
+            pathfinder.tick();
+    }
+}
+```
+
+Please note that this is NOT the best implementation of a multiplier-like
+concept. It's rather verbose and can be simplified greatly.
