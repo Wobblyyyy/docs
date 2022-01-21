@@ -56,14 +56,14 @@ double distance = PointXY.distance(a, b); // distance = 5
 PointXY a = new PointXY(0, 0);
 PointXY b = new PointXY(5, 5);
 
-double distance = PointXY.distance(a, b); // 5 * sqrt(2) (roughly 7.07)
+double distance = PointXY.distance(a, b); // 5 times sqrt(2) (roughly 7.07)
 ```
 
 ```java
 PointXY a = new PointXY(-5, -5);
 PointXY b = new PointXY(5, 5);
 
-double distance = PointXY.distance(a, b); // 10 * sqrt(2) (roughly 14.14)
+double distance = PointXY.distance(a, b); // 10 times sqrt(2) (roughly 14.14)
 ```
 
 ##### Method: inDirection
@@ -147,28 +147,16 @@ translation the robot receives is different.
 The `Translation` class provides an `absoluteToRelative(Translation, Angle)`
 method that converts absolute translations to relative translations.
 ```java
-/**
- * Convert an absolute translation into a relative translation.
- *
- * <p>
- * You may be more familiar with this concept if we use the term
- * "field-relative" and "robot-relative". This method converts a field
- * relative translation into a robot relative one.
- * </p>
- *
- * @param translation the original (absolute) {@code Translation}.
- * @param heading     the heading the robot is currently facing. This value
- *                    should almost always come directly from the robot's
- *                    odometry system.
- * @return a relative translation.
- */
 public static Translation absoluteToRelative(Translation translation,
                                              Angle heading) {
 }
 ```
 
 ## Operating Pathfinder
-Pathfinder's operation is designed to be relatively simple.
+Pathfinder's operation is designed to be as simple as possible, while still
+allowing advanced users to have the highest degree of control over their
+robot's movement. There are some key concepts you'll need to get the hang of
+in order to operate the library, but after you do, it should be easy going.
 
 ### Ticking Pathfinder
 This is absolutely crucial to operating the library - you need to "tick" it.
@@ -208,8 +196,10 @@ the same as tickUntil, except it has a `Consumer` that will be executed
 once the tickUntil method has finished.
 
 #### An example of method chaining
-Method chaining is beautiful - who doesn't love method chaining?
-
+Method chaining is beautiful - who doesn't love method chaining? Method
+chaining is mostly personal preference - there's no real advantage or
+disadvantage to using it or not using it. Most of Pathfinder's API-like
+classes have chainable methods by default.
 ```java
 public class ExampleMethodChaining() {
   private static final PointXYZ TARGET_A = ...;
@@ -274,21 +264,20 @@ public class ExampleSetTranslation {
 }
 ```
 
-#### Controlling the robot in...
+### Controlling the robot in...
 Here are some quick tips on controlling the robot in different modes.
 
-##### Autonomous
+#### Autonomous
 If the robot is in an autonomous period, it's strongly encouraged you make
 use of trajectories and followers. You can absolutely control your robot
 however you'd like, but I would strongly encourage you to make use of
 trajectories, as they greatly simplify your autonomous code and allow you to
 do a lot more with your autonomous.
 
-##### Tele-op
+#### Tele-op
 Whenever the robot is operating in tele-op mode, you'll (probably) want the
 robot to respond to driver input. This can be accomplished with the previously
 mentioned `setTranslation(Translation)` method.
-
 ```java
 public void runTeleOp() {
     Pathfinder pathfinder = new Pathfinder(...);
@@ -310,16 +299,24 @@ automatically changed whenever the `tick()` method is called. I'd suggest you
 either use one or the other at a time - if you're using `setTranslation`, you
 shouldn't be using `tick`, and vice versa.
 
-#### Stopping and pausing
+### Stopping and pausing
+I'm sure at some point, you'll need to stop your robot. I'm going to quickly
+define some terms, just so there's no confusion later on.
+- Pathfinder's MOVEMENT is your robot's physical movement. If Pathfinder is
+  still moving... well, your robot is still moving.
+- Pathfinder's EXECUTION is managed with the `tick()` method. Execution
+  controls the robot, but it does not directly impact movement - there's only
+  a (very strong) correlation.
 
-##### Stopping Pathfinder's execution
+#### Stopping Pathfinder's execution
 Pathfinder's execution and movement are NOT linked, so it's possible to cancel
-ONLY Pathfinder's execution or ONLY Pathfinder's movement.
+ONLY Pathfinder's execution or ONLY Pathfinder's movement. If your robot is
+moving when you use the `clear()` method, it'll continue moving after the
+robot's translation has been manually set.
 
 `Pathfinder` provides a method, `clear()`, that can be used to stop the
 execution of the library. This will clear the queue of `Follower` instances,
 which will transitively clear any queued `Trajectory` instances.
-
 ```java
 Pathfinder pathfinder = new Pathfinder(...);
 pathfinder.clear();
@@ -327,11 +324,10 @@ pathfinder.clear();
 
 Note that stopping execution will NOT stop the movement of the robot.
 
-##### Stopping the robot (stopping movement)
+#### Stopping the robot (stopping movement)
 Physically stopping the robot is an incredibly common task that I'm sure you
 will, at some point, need to do. To physically stop the robot, set the
 translation to a translation with X, Y, and Z values of 0.
-
 ```java
 Pathfinder pathfinder = new Pathfinder(...);
 pathfinder.setTranslation(new Translation(0, 0, 0));
@@ -344,7 +340,6 @@ and the translation.
 
 ##### Stopping execution and movement
 Surprisingly enough, it's exactly what you'd expect.
-
 ```java
 Pathfinder pathfinder = new Pathfinder(...);
 
@@ -355,12 +350,11 @@ pathfinder.clear();
 pathfinder.setTranslation(new Translation(0, 0, 0));
 ```
 
-##### Pausing
+#### Pausing
 There's no officially supported way to pause Pathfinder temporarily. For now,
 you can just stop calling the `tick()` method for as long as you'd like to
 pause Pathfinder. This will work perfectly fine for anything that does not
 have elapsed time as a parameter.
-
 ```java
 public void run() {
     Pathfinder pathfinder = new Pathfinder(...);
@@ -428,9 +422,9 @@ relative translation.
 // let's say you want to move the robot forwards, relative to the robot
 Drive drive = ...; // assume this is actually implemented
 
-        Translation translation = new Translation(0, 1, 0);
+Translation translation = new Translation(0, 1, 0);
 
-        drive.setTranslation(translation);
+drive.setTranslation(translation);
 ```
 
 ```java
@@ -439,7 +433,7 @@ Drive drive = ...; // assume this is actually implemented
 
 // assume 'robot' is declared
 // assume 'robot' has a method 'getPos' that returns a PointXYZ - the robot's position
-        Translation translation = new Translation(0, 1, 0).toRelative(robot.getPos().z());
+Translation translation = new Translation(0, 1, 0).toRelative(robot.getPos().z());
 ```
 
 #### Robot: odometry
@@ -456,159 +450,12 @@ The `Odometry` interface is incredibly simple - it should report the robot's
 position on the field. That's it. This position should be absolute.
 
 ##### Methods from `me.wobblyyyy.pathfinder2.robot.Odometry`
-There's a lot of methods in the Odometry interface, to be honest. While
-I absolutely could list all of them out, I'm incredibly lazy and don't have
-the energy for that. Instead, here's a copy-pasted version of the interface.
+There's a lot of methods in the Odometry interface, to be honest. I'm not
+going to list them all here, because that would take way too much time, but
+the main ones you need to know are:
+- `getPosition()` - get the robot's current position
 
-```java
-public interface Odometry {
-    PointXYZ getRawPosition();
-
-    /**
-     * Get the position produced by {@link #getRawPosition()} combined with
-     * the offset produced by {@link #getOffset()}.
-     *
-     * @return the odometry system's position, with an offset.
-     */
-    PointXYZ getPosition();
-
-    /**
-     * Get the odometry system's offset.
-     *
-     * @return the odometry system's offset.
-     */
-    PointXYZ getOffset();
-
-    /**
-     * Set the odometry system's offset.
-     *
-     * @param offset the new offset. This offset value will replace whatever
-     *               the old offset value was.
-     */
-    void setOffset(PointXYZ offset);
-
-    /**
-     * Get the X value of the offset.
-     *
-     * @return the X value of the offset.
-     */
-    double getOffsetX();
-
-    /**
-     * Get the Y value of the offset.
-     *
-     * @return the Y value of the offset.
-     */
-    double getOffsetY();
-
-    /**
-     * Get the Z value of the offset.
-     *
-     * @return the Z value of the offset.
-     */
-    Angle getOffsetZ();
-
-    /**
-     * Modify the existing offset by whatever offset you provide.
-     *
-     * @param offset the offset to add to the existing offset.
-     */
-    void offsetBy(PointXYZ offset);
-
-    /**
-     * Remove the current offset. This will set the offset to (0, 0, 0).
-     */
-    void removeOffset();
-
-    /**
-     * Create an offset that makes the odometry's current position the
-     * provided target position.
-     *
-     * @param targetPosition the position you'd like the odometry system
-     *                       to be offset to.
-     */
-    void offsetSoPositionIs(PointXYZ targetPosition);
-
-    /**
-     * Find an offset that makes the odometry's current position equal to
-     * (0, 0) and apply it.
-     */
-    void zeroOdometry();
-
-    /**
-     * Get the robot's X position.
-     *
-     * @return {@link #getPosition()}.
-     */
-    double getX();
-
-    /**
-     * Get the robot's Y position.
-     *
-     * @return {@link #getPosition()}.
-     */
-    double getY();
-
-    /**
-     * Get the robot's Z position.
-     *
-     * @return {@link #getPosition()}.
-     */
-    Angle getZ();
-
-    /**
-     * Get the robot's current heading in radians.
-     *
-     * @return the robot's current heading in radians.
-     */
-    double getRad();
-
-    /**
-     * Get the robot's current heading in degrees.
-     *
-     * @return the robot's current heading in degrees.
-     */
-    double getDeg();
-
-    /**
-     * Get the raw X value from the robot.
-     *
-     * @return the robot's raw X value.
-     * @see #getRawPosition()
-     */
-    double getRawX();
-
-    /**
-     * Get the raw Y value from the robot.
-     *
-     * @return the robot's raw Y value.
-     * @see #getRawPosition()
-     */
-    double getRawY();
-
-    /**
-     * Get the raw Z value from the robot.
-     *
-     * @return the robot's raw Z value.
-     * @see #getRawPosition()
-     */
-    Angle getRawZ();
-
-    /**
-     * Get the robot's raw heading in radians.
-     *
-     * @return the robot's raw heading in radians.
-     */
-    double getRawRad();
-
-    /**
-     * Get the robot's raw heading in degrees.
-     *
-     * @return the robot's raw heading in degrees.
-     */
-    double getRawDeg();
-}
-```
+Yep. That's it. There's not much to it, really.
 
 ##### The `AbstractOdometry` class
 Please, for your own good, make use of the `AbstractOdometry` abstract class
@@ -619,11 +466,16 @@ well, it should return the robot's raw position.
 ##### Using the `Odometry` interface
 There's not really all that much you can do with it.
 
+###### Why should offsets be managed with odometry?
+If offsets are managed exclusively by odometry, it's significantly less likely
+you'll encounter a hard-to-find bug. Because Pathfinder is designed to be a
+suite of movement-related tools, you can handle all of your odometry offsetting
+needs with built-in Pathfinder utilities.
+
 ###### Modify the robot's position
 Refer to the following methods to modify the robot's position. It's suggested
 that you only modify the robot's position with the `Odometry` interface's
 methods, so you can eliminate as many potential sources of issues as possible.
-
 ```java
 public interface Odometry {
     // ...
@@ -644,7 +496,8 @@ speaking, `Follower`s actually control your robot's movement, but instances
 of the `Trajectory` interface dictate how your robot moves.
 
 A trajectory instructs your robot on how to move around the field. They
-can be customized to modify how the robot moves.
+can be customized to modify how the robot moves. There are a variety of types
+of trajectories, but they all do the same thing - tell your robot where to go.
 
 #### What's a `Follower`?
 You might see the term `Follower` mentioned in Pathfinder's documentation (or
@@ -656,6 +509,10 @@ way more complicated than it actually is, but just know that `Follower` is used
 exclusively internally by Pathfinder. You can create your own implementations
 of `Follower` and `FollowerGenerator` because this library is fairly modular,
 but there's not much of a reason to.
+
+##### Does my follower matter?
+Not really, no. The `GenericFollower` should work for almost all use cases.
+I can't think of a situation where a `GenericFollower` would not suffice.
 
 #### Linear trajectory
 The most simple kind of trajectory is the [linear trajectory](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/LinearTrajectory.java).
@@ -692,6 +549,12 @@ following parameters:
 A fast trajectory is a linear trajectory, but it's less precise. The purpose
 of a fast trajectory is documented in the file - check it out right
 [here](https://github.com/Wobblyyyy/Pathfinder2/blob/master/pathfinder2-core/src/main/java/me/wobblyyyy/pathfinder2/trajectory/FastTrajectory.java).
+
+Fast trajectories save speed by not requiring your robot to meet certain
+tolerance values when it determines if it has or has not completed a follower.
+This makes the trajectory less accurate, but can save a good amount of time,
+as your robot won't be required to adjust itself, which can take quite a
+while to do, and sometimes cause your robot to circle around a point forever.
 
 #### Timed trajectory
 A timed trajectory is unlike any of the other forms of trajectory - it operates
@@ -739,6 +602,23 @@ Splines are popular for trajectories because they allow you to move your robot
 quickly, utilizing the curve to cut time. You can also make a trajectory
 speed up or slow down or just about anything else, except not actually anything
 else.
+
+##### How splines work
+Here's the answer: spline interpolation. Basically, you input an X value and
+get out a Y value. It's similiar to a linear equation, or any equation, for
+that matter.
+
+##### When to use a spline
+Splines have quite a few use cases.
+- Making a robot move in a curvy pattern
+- Dynamically varying the speed or tolerance of a follower
+- Making a non-linear controller
+
+##### When to NOT use a spline
+Splines can be overused quite easily, so I'd suggest that you avoid using
+splines whenever possible. By "possible" I mean whenever it doesn't harm
+you in any way - if using a spline would be more effective, but would require
+more work, I'd encourage you to put in the extra work.
 
 ##### What's a step value?
 You'll see the term `step` used quite often when dealing with splines. In
@@ -892,11 +772,48 @@ Pathfinder's `tick()` method calls the `tick()` method of Pathfinder's
 `ListenerManager`, which in turn calls the `tick()` method of all of the
 associated listeners.
 
+Listeners function by repeatedly checking to see if a certain condition has
+been met. In a robotics environment, your robot's physical actions are
+separated from your code, so listeners work magically - you simply plop one
+down and you're good to go. In an environment where fields/variables must be
+changed manually via code, listeners shouldn't be used, as they can
+overcomplicate code.
+
+#### Ticking listeners
+Listeners must be ticked in order to function properly. It's strongly suggested
+that you make use of the `ListenerManager` class, as it makes managing
+listeners significantly easier. `Pathfinder` has a method called
+`getListenerManager()` which returns the `ListenerManager` that that instance
+of Pathfinder is using.
+
+##### If you used a listener manager
+If you register a listener by using the `pathfinder#getListenerManager()`'s
+`bind`, your listener will automataically be updated whenever Pathfinder's
+`tick()` method is called.
+
+##### If you did not use a listener manager
+If you did not use a listener manager, you'll have to figure out how to
+tick your listeners on your own. I promise, it's not too hard - you just
+have to use the `tick` method, and you'll be all good!
+
 #### Using bindings
 The `listening` package of Pathfinder provides many utilities designed to
 simplify writing code for a robot. These utilities are customized to my
 preferences and using them may not be appropriate if a different solution
 is preferable.
+
+##### Listener manager
+First, it's important to understand HOW the listener manager works. It's
+not all that difficult, to be honest. This example is going to assume
+a robotics context:
+- Bind the listener (say we want to make dpad up do something)
+- Tick Pathfinder as normal
+
+See? Not too bad. Each of the listeners in the listener manager is added
+to a collection. That collection is polled/ticked/updated every time Pathfinder
+is ticked.
+
+**IF YOU DON'T TICK PATHFINDER, LISTENERS WILL NOT WORK.**
 
 ##### Binding buttons
 Buttons are a critical part of user input.
@@ -941,9 +858,111 @@ public class BindingUserControls {
 }
 ```
 
+##### Binding buttons (but easier)
+This is only sightly easier than the previous approach, but who doesn't
+love writing clean code? Exactly.
+```java
+import me.wobblyyyy.pathfinder2.utils.SupplierFilter;
+import me.wobblyyyy.pathfinder2.Pathfinder;
+import me.wobblyyyy.pathfinder2.listening.ListenerMode;
+
+public class BindingUserControls {
+    Pathfinder pathfinder = Pathfinder.newSimulatedPathfinder(0.01);
+
+    public void bindControlsAndRun() {
+        pathfinder.getListenerManager()
+            .bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                aButton::isPressed,
+                () -> {}
+            )
+            .bind(
+                ListenerMode.CONDITION_NEWLY_NOT_MET,
+                aButton::isPressed,
+                () -> {}
+            );
+
+        while (true)
+            pathfinder.tick();
+    }
+}
+```
+
 ##### Binding arbitrary objects
 You can also bind arbitrary objects, allowing Pathfinder to handle just
-about any event-based functionality you want.
+about any event-based functionality you want. The "bind" method of the
+`ListenerManager` class (accessible via `Pathfinder#getListenerManager()`)
+is a generic method with type parameter T, representing the type of object
+that's being listened to. Conveniently enough, Java's lambda syntax makes
+it very easy to create these bindings.
+
+###### Supplier
+This `Supplier` of type T should accept input for the binding. This input
+can be anything at all. This is frequently a `Supplier<Boolean>`, as it
+allows you to bind something to a button. For example, here's a basic
+binding attached to a button.
+```java
+public class Example {
+    /**
+     * this method is meant to emulate a method that gets the state of
+     * a button. for the purpose of demonstration, assume this method
+     * returns whether or not a physical button (the A button in this case)
+     * is pressed.
+     *
+     * @return the button's current state.
+     */
+    public boolean aButton() {
+        return true;
+    }
+
+    public void bindButton() {
+        // print a message whenever a button is pressed
+        pathfinder.getListenerManager()
+            .bind(
+                ListenerMode.CONDITION_NEWLY_MET,
+                this::aButton,
+                (isPressed) -> isPressed,
+                (isPressed) -> System.out.println("A button has been pressed!");
+            );
+    }
+}
+```
+
+###### Predicate
+How is it determined if the condition is met or not? A `Predicate` is used.
+This is the same type as the `Supplier`. Every time the listener is ticked,
+this predicate will be tested (using the `Supplier`) for input. If the
+predicate returns true, the condition is considered to have been met. If
+the predicate returns false, the condition is considered to have not been met.
+
+###### Predicate with a boolean
+Because a boolean is already a predicate in itself, you simply have to return
+the value of the boolean. All this predicate does is return the input value:
+because the input value is a boolean, and `Predicate`s must return booleans,
+we're all good!
+```java
+public class Example {
+    private final Predicate<Boolean> predicate = (bool) -> bool;
+}
+```
+
+###### Predicate with an arbitrary object
+With an arbitrary object, you can have any condition you want.
+```java
+public class Example {
+    private final Predicate<PointXYZ> predicate = (point) -> point.x() > 10;
+}
+```
+
+###### Consumer
+When the condition is met and the listener mode is active (for the "NEWLY
+MET", this happens the first time the `Predicate` returns true and will not
+happen again until the `Predicate` returns false then true once again), this
+`Consumer` accepts an input of type T as a parameter. This is the input value
+that caused the condition to be true.
+
+###### Code example
+Here's a complete code example.
 ```java
 import me.wobblyyyy.pathfinder2.utils.SupplierFilter;
 import me.wobblyyyy.pathfinder2.Pathfinder;
@@ -1004,7 +1023,8 @@ public class BindingUserControls {
 ```
 
 ##### Binding joysticks
-How else can you drive the robot? Exactly.
+How else can you drive the robot? Exactly. You'll most likely need to bind
+joysticks to drive your robot during tele-op.
 ```java
 import me.wobblyyyy.pathfinder2.utils.SupplierFilter;
 import me.wobblyyyy.pathfinder2.Pathfinder;
@@ -1042,7 +1062,11 @@ public class BindingUserControls {
 
 ##### Binding a speed modifier
 When one gear isn't cool enough... This sample builds upon the previous
-sample on binding joysticks.
+sample on binding joysticks. Pressing the right trigger sets the "speed
+multiplier" to 1.0, making the robot move as fast as it can. Pressing the
+left trigger sets the multiplier to 0.25, making the robot significantly
+slower. If neither trigger is pressed, the multiplier will be set to 0.5,
+making the robot move at its normal speed.
 ```java
 import me.wobblyyyy.pathfinder2.utils.SupplierFilter;
 import me.wobblyyyy.pathfinder2.Pathfinder;
@@ -1119,6 +1143,140 @@ public class BindingUserControls {
 Please note that this is NOT the best implementation of a multiplier-like
 concept. It's rather verbose and can be simplified greatly.
 
+### More advanced bindings
+You can do some pretty cool and pretty advanced bindings using the
+following class: `me.wobblyyyy.pathfinder2.utils.SupplierFilter`.
+
+#### Requiring multiple buttons to be pressed
+This binding will only be activated if the A and B buttons are pressed.
+```java
+pathfinder.getListenerManager()
+    .bind(
+        ListenerMode.CONDITION_NEWLY_MET,
+        () -> SupplierFilter.allTrue(
+            this::aButton, // assume aButton is a Supplier<Boolean>
+            this::bButton  // assume bButton is a Supplier<Boolean>
+        ),
+        (isPressed) -> isPressed,
+        (isPressed) -> {
+            // both the a and b buttons must be pressed
+        }
+    );
+```
+
+#### Requiring one button to be pressed and other buttons not pressed
+This binding will only be activated if the A button is pressed, and the
+B, X, and Y buttons are not pressed.
+```java
+pathfinder.getListenerManager()
+    .bind(
+        ListenerMode.CONDITION_NEWLY_MET,
+        () -> SupplierFilter.trueThenAllFalse(
+            this::aButton, // assume aButton is a Supplier<Boolean>
+            this::bButton, // assume bButton is a Supplier<Boolean>
+            this::xButton, // assume xButton is a Supplier<Boolean>
+            this::yButton  // assume yButton is a Supplier<Boolean>
+        ),
+        (isPressed) -> isPressed,
+        (isPressed) -> {
+            // both the a and b buttons must be pressed
+        }
+    );
+```
+
+#### Requiring any condition to be true
+This binding will be activated whenever either the A, B, X, or Y button
+is pressed.
+```java
+pathfinder.getListenerManager()
+    .bind(
+        ListenerMode.CONDITION_NEWLY_MET,
+        () -> SupplierFilter.anyTrue(
+            this::aButton, // assume aButton is a Supplier<Boolean>
+            this::bButton, // assume bButton is a Supplier<Boolean>
+            this::xButton, // assume xButton is a Supplier<Boolean>
+            this::yButton  // assume yButton is a Supplier<Boolean>
+        ),
+        (isPressed) -> isPressed,
+        (isPressed) -> {
+            // both the a and b buttons must be pressed
+        }
+    );
+```
+
+#### Binding a speed multiplier
+```java
+// assume these are declared elsewhere for the sake of demonstration
+Supplier<Boolean> rightTrigger;
+Supplier<Boolean> leftTrigger;
+
+// must be effectively final to use from within lambdas
+AtomicReference<Double> multiplier = new AtomicReference(0d);
+
+pathfinder.getListenerManager()
+    .bind(
+        ListenerMode.CONDITION_NEWLY_MET,
+        () -> SupplierFilter.allFalse(
+            rightTrigger,
+            leftTrigger
+        )
+        (isPressed) -> isPressed,
+        (isPressed) -> multiplier.set(0.5);
+    )
+    .bind(
+        ListenerMode.CONDITION_NEWLY_MET,
+        rightTrigger,
+        (isPressed) -> isPressed,
+        (isPressed) -> multiplier.set(1.0);
+    )
+    .bind(
+        ListenerMode.CONDITION_NEWLY_MET,
+        leftTrigger,
+        (isPressed) -> isPressed,
+        (isPressed) -> multiplier.set(0.25);
+    );
+```
+
+#### A simple shifter
+A shifter is a pretty simple concept - you can either shift up or down.
+Pressing the right trigger will shift upwards, and pressing the left trigger
+will shift downwards. This shifter doesn't actually do very much - it allows
+you to shift up and down, but it doesn't do anything with the gear. Whenever
+you press the A button, this will log the current gear to the standard output.
+```java
+Supplier<Boolean> rightTrigger;
+Supplier<Boolean> leftTrigger;
+Supplier<Boolean> aButton;
+
+Shifter shifter = new Shifter(1, 1, 5, false, (pf) -> {});
+
+pathfinder.getListenerManager()
+    .bind(
+        ListenerMode.CONDITION_NEWLY_MET,
+        () -> SupplierFilter.trueThenAllFalse(
+            rightTrigger,
+            leftTrigger
+        ),
+        (isPressed) -> isPressed,
+        (isPressed) -> shifter.shift(ShifterDirection.UP)
+    )
+    .bind(
+        ListenerMode.CONDITION_NEWLY_MET,
+        () -> SupplierFilter.trueThenAllFalse(
+            leftTrigger,
+            rightTrigger
+        ),
+        (isPressed) -> isPressed,
+        (isPressed) -> shifter.shift(ShifterDirection.DOWN)
+    )
+    .bind(
+        ListenerMode.CONDITION_NEWLY_MET,
+        aButton,
+        (isPressed) -> isPressed,
+        (isPressed) -> System.out.printf("current gear: %s%n", shifter.getCurrentGear())
+    );
+```
+
 ## Using prebuilt utilities
 Prebuilt utilities are provided because they're common enough that I found
 it's worth including some abstraction.
@@ -1139,6 +1297,13 @@ data in a way not normally possible with Pathfinder.
 ### Acceleration
 
 ## Path generation
+Path generation is quite literally what the name suggests: generating a path.
+Pathfinder uses an "A star" pathfinding algorithm.
+
+### A quick suggestion
+Don't use path generation if you don't have to. It's computationally expensive,
+which, during loop-based operation, can cause some performance issues.
+
 ### Pathfinding algorithm
 ### Practical applications
 ### Implementation
