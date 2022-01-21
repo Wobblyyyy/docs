@@ -10,6 +10,13 @@ it would definitely be a better idea to separate everything by file, I don't
 have the energy for that right now, so all of it is getting dumped into
 one huge file.
 
+## A very quick tip
+Sorry, I hate to interrupt. Anyways. If you're browsing this page in a web
+browser, you're probably using the table of contents to navigate. If that's
+the case, I'd like to let you know that after you click on a link and read
+whatever it is you need to read, you can jump immediately back to the table
+of contents if you hit the backspace key on your keyboard.
+
 ##### TABLE OF CONTENTS
 * TOC
 {:toc}
