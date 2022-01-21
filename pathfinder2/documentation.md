@@ -152,6 +152,10 @@ public static Translation absoluteToRelative(Translation translation,
 }
 ```
 
+## Calibration
+Calibration is a topic so important it deserves its very own page! Check
+it out [right here](calibration.md).
+
 ## Operating Pathfinder
 Pathfinder's operation is designed to be as simple as possible, while still
 allowing advanced users to have the highest degree of control over their
